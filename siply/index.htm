@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIPLY Splash Animation</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html,body { height:100%; background:white; font-family:'Poppins',sans-serif; overflow:hidden; }
+
+  .splash { position:relative; width:100%; height:100%; display:flex; justify-content:center; align-items:center; overflow:hidden; }
+
+  .logo { font-size:3rem; font-weight:900; color:#35795B; z-index:3; transition:color 1s ease; font-style: italic; }
+
+  .circle { position:absolute; top:50%; left:50%; width:0; height:0; background:#35795B; border-radius:50%;
+            transform:translate(-50%,-50%); transition:all 2s ease; z-index:2; }
+
+  .expand { width:300vmax; height:300vmax; }
+
+  /* Green overlay */
+  .splash::before { content:''; position:absolute; inset:0; background:#35795B; z-index:1;
+                    transform:scaleY(0); transform-origin:center; transition:transform 2s ease; }
+
+  .green-phase::before { transform:scaleY(1); }
+
+  .white-text { color:white; }
+
+  .settle::before { transform:scaleY(0.75); transform-origin:top; }
+
+  /* Curved white bottom */
+  .curve { position:absolute; bottom:0; left:0; width:100%; height:25%; background:white;
+           border-top-left-radius:50% 40%; border-top-right-radius:50% 40%;
+           transform:translateY(100%); transition:transform 1.5s ease; z-index:3; }
+
+  .show-curve { transform:translateY(0); }
+
+  /* Continue Button */
+  .continue-btn { position:absolute; bottom:-120px; opacity:0; background:#35795B; color:white;
+                  font-weight:700; font-size:1.2rem; border:none; border-radius:14px;
+                  padding:15px 50px; box-shadow:0 4px 8px rgba(0,0,0,.25);
+                  transition:all 1.2s ease; cursor:pointer; z-index:4; }
+
+  .show-btn { bottom:50px; opacity:1; }
+</style>
+</head>
+<body>
+
+<div class="splash">
+  <div class="circle"></div>
+  <div class="logo">SIPLY</div>
+  <div class="curve"></div>
+  <button class="continue-btn" id="continueBtn">Continue</button>
+</div>
+
+<script>
+  const splash   = document.querySelector('.splash');
+  const circle   = document.querySelector('.circle');
+  const logo     = document.querySelector('.logo');
+  const btn      = document.getElementById('continueBtn');
+  const curve    = document.querySelector('.curve');
+
+  /* ---- Animation timeline ---- */
+  setTimeout(() => circle.classList.add('expand'), 800);
+
+  setTimeout(() => {
+    splash.classList.add('green-phase');
+    logo.classList.add('white-text');
+  }, 2500);
+
+  /* ---- Show curve + button after the green phase ---- */
+  setTimeout(() => {
+    splash.classList.add('settle');
+    curve.classList.add('show-curve');
+    btn.classList.add('show-btn');
+  }, 2500);   // change 2500 to 2500 + 60000 if you really want a 1-minute hold
+
+  /* ---- Page refresh on click ---- */
+  btn.addEventListener('click', () => {
+    // optional: tiny fade-out before reload for a smoother feel
+    btn.style.transition = 'opacity .3s ease';
+    btn.style.opacity = '0';
+    setTimeout(() => location.reload(), 300);
+  });
+</script>
+</body>
+</html>
